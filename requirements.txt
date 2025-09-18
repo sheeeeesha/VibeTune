@@ -3,4 +3,5 @@ fal-client
 mutagen
 streamlit-mic-recorder
 requests
+soundfile
 
