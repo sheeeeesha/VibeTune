@@ -1,5 +1,6 @@
 streamlit
 fal-client
 mutagen
-requests
 streamlit-mic-recorder
+requests
+
