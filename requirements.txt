@@ -1,0 +1,8 @@
+streamlit
+streamlit-mic-recorder
+audio-recorder-streamlit
+fal-client
+soundfile
+numpy
+requests
+mutagen
