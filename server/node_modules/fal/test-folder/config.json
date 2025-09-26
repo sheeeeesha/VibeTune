@@ -1,0 +1,10 @@
+{
+  "folder": "./test",
+  "db": "./meta-log.nde.db",
+  "logFromStart": true,
+  "chokidarOptions" : {
+    "userPolling" : true,
+    "alwaysStat" : true,
+    "ignorePermissionErrors" : true
+  }
+}
