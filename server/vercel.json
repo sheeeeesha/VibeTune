@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "src/index.js"
     }
-  ],
-  "env": {
-    "FAL_KEY": "@fal_key"
-  }
+  ]
 }
