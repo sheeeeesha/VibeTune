@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "@fal-ai/client": "^0.1.1",
+    "@fal-ai/client": "latest",
     "multer": "^2.0.2"
   },
   "devDependencies": {
