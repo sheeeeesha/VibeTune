@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import toast from "react-hot-toast";
 import Waveform from "@/components/Waveform";
+import PixelWaveform from "@/components/PixelWaveform";
 import { useMixer, LayerKey } from "@/store/useMixer";
 
 type Props = {
@@ -19,6 +20,7 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
 	const [blobUrl, setBlobUrl] = useState<string | undefined>();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [playing, setPlaying] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 	const chunksRef = useRef<Blob[]>([]);
 	const { layers, setLayerUrl } = useMixer();
@@ -181,13 +183,26 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
             ) : null}
 
             {layers[layer]?.audioUrl ? (
-				<div className="space-y-2">
-					<audio controls src={layers[layer]?.audioUrl} className="w-full" />
-					{layers[layer]?.audioUrl ? <Waveform audioUrl={layers[layer].audioUrl as string} /> : null}
-				</div>
-			) : (
-                <div className="text-sm text-neutral-400">Upload audio or record to generate AI {title.toLowerCase()}</div>
-			)}
+                <div className="space-y-3">
+                    <audio 
+                        controls 
+                        src={layers[layer]?.audioUrl} 
+                        className="w-full"
+                        onPlay={() => setPlaying(true)}
+                        onPause={() => setPlaying(false)}
+                        onEnded={() => setPlaying(false)}
+                    />
+                    <div className="space-y-2">
+                        <PixelWaveform isPlaying={playing} intensity={0.7} />
+                        <Waveform audioUrl={layers[layer].audioUrl as string} />
+                    </div>
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    <div className="text-sm text-neutral-400">Upload audio or record to generate AI {title.toLowerCase()}</div>
+                    <PixelWaveform isPlaying={false} intensity={0.1} />
+                </div>
+            )}
         </motion.div>
 	);
 }
