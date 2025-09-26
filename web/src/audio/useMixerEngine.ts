@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMixer, LayerKey } from "@/store/useMixer";
 
 type SourceMap = Partial<Record<LayerKey, AudioBufferSourceNode>>;
@@ -26,7 +26,7 @@ export function useMixerEngine() {
     // Init context once
     useEffect(() => {
         if (!audioCtxRef.current) {
-            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
             audioCtxRef.current = ctx;
             const master = ctx.createGain();
             master.gain.value = 1;
@@ -40,7 +40,7 @@ export function useMixerEngine() {
                 gainsRef.current[k] = g;
             });
         }
-    }, []);
+    }, [volumes]);
 
     // Load/refresh buffers on URL change
     useEffect(() => {
@@ -52,14 +52,14 @@ export function useMixerEngine() {
             try {
                 const res = await fetch(url, { cache: 'no-store' });
                 const arr = await res.arrayBuffer();
-                const buf = await ctx.decodeAudioData(arr);
+                const buf = await ctx!.decodeAudioData(arr);
                 if (!cancelled) buffersRef.current[key] = buf;
             } catch (e) {
                 console.error('decode error', key, e);
             }
         }
 
-        const jobs: Promise<any>[] = [];
+        const jobs: Promise<void>[] = [];
         (Object.keys(layers) as LayerKey[]).forEach((k) => {
             const url = layers[k].audioUrl;
             if (url) jobs.push(load(k, url));
@@ -87,14 +87,13 @@ export function useMixerEngine() {
         const apply = (k: LayerKey, level: number) => {
             const base = volumes[k];
             const g = gainsRef.current[k];
-            if (g) g.gain.setTargetAtTime(base * level, audioCtxRef.current!.currentTime, 0.01);
+            if (g && audioCtxRef.current) g.gain.setTargetAtTime(base * level, audioCtxRef.current.currentTime, 0.01);
         };
         apply('beats', a);
         apply('bass', a);
         apply('melody', b);
         apply('vocals', b);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [crossfade]);
+    }, [crossfade, volumes]);
 
     function stop() {
         Object.values(sourcesRef.current).forEach((s) => {

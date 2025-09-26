@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { useMixer } from "@/store/useMixer";
+import { useMixer, LayerKey } from "@/store/useMixer";
 import { useMixerEngine } from "@/audio/useMixerEngine";
 
 export default function MixerToolbar() {
@@ -35,7 +35,7 @@ export default function MixerToolbar() {
                     <button
                         key={key}
                         className={`px-2 py-1 rounded text-xs border ${state.enabled ? "bg-neutral-800 border-neutral-700" : "bg-neutral-900 border-neutral-800 text-neutral-400"}`}
-                        onClick={() => toggleLayer(key as any)}
+                        onClick={() => toggleLayer(key as LayerKey)}
                     >
                         {key}
                     </button>
@@ -43,13 +43,13 @@ export default function MixerToolbar() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
-                {(['beats','bass','melody','vocals'] as any[]).map((k) => (
+                {(['beats','bass','melody','vocals'] as LayerKey[]).map((k) => (
                     <div key={k} className="flex items-center gap-2">
                         <span className="w-14 text-xs capitalize text-neutral-300">{k}</span>
                         <Tooltip.Root>
                           <Tooltip.Trigger asChild>
                             <input type="range" min={0} max={1} step={0.01}
-                               value={(volumes as any)[k]}
+                               value={volumes[k]}
                                onChange={(e) => setLayerVolume(k, Number(e.target.value))}
                             />
                           </Tooltip.Trigger>
