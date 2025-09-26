@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Tooltip.Provider delayDuration={200} skipDelayDuration={200}>
+          {children}
+          <Toaster position="bottom-center" toastOptions={{ style: { background: "#111827", color: "#e5e7eb" } }} />
+        </Tooltip.Provider>
       </body>
     </html>
   );

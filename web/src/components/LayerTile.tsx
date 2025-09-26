@@ -1,5 +1,8 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import toast from "react-hot-toast";
 import Waveform from "@/components/Waveform";
 import { useMixer, LayerKey } from "@/store/useMixer";
 
@@ -65,6 +68,7 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
             return;
         }
         setLoading(true);
+        const t = toast.loading(`Generating ${title}...`);
 		const form = new FormData();
 		form.append("audio", file);
         try {
@@ -86,24 +90,33 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
                 }
                 console.error("Generation failed:", resp.status, extra);
                 setError(`Generation failed (${resp.status}) - ${extra}`);
+                toast.error(`Failed to generate ${title}`);
                 return;
             }
             const data = await resp.json();
             if (data?.audioUrl) {
                 setLayerUrl(layer, data.audioUrl);
+                toast.success(`${title} ready!`);
             } else {
                 setError("Server did not return audioUrl.");
+                toast.error("No audioUrl from server");
             }
         } catch (e) {
             console.error(e);
             setError("Network error. Check API server and CORS.");
+            toast.error("Network error");
         } finally {
             setLoading(false);
+            toast.dismiss(t);
         }
 	}
 
     return (
-        <div className="rounded-2xl border border-neutral-800 p-5 bg-neutral-900/40 flex flex-col gap-4 shadow-[0_0_40px_-20px_rgba(168,85,247,.4)]">
+        <motion.div
+            className="rounded-2xl border border-neutral-800 p-5 bg-neutral-900/40 flex flex-col gap-4 shadow-[0_0_40px_-20px_rgba(168,85,247,.4)]"
+            whileHover={{ y: -2, boxShadow: "0 0 60px -18px rgba(99,102,241,.45)" }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
             <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
                     <div className="h-9 w-9 rounded-lg grid place-items-center text-xl bg-neutral-800/70">
@@ -139,11 +152,20 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
                         <span>Upload Audio</span>
                     </label>
                     {!recording ? (
-                        <button onClick={startRecording} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 border border-neutral-700 inline-flex items-center gap-1 disabled:opacity-50">Record Audio</button>
+                        <Tooltip.Root>
+                            <Tooltip.Trigger asChild>
+                                <button onClick={startRecording} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 border border-neutral-700 inline-flex items-center gap-1 disabled:opacity-50">Record Audio</button>
+                            </Tooltip.Trigger>
+                            <Tooltip.Portal>
+                                <Tooltip.Content sideOffset={6} className="text-xs px-2 py-1 rounded bg-neutral-800 border border-neutral-700">
+                                    Record a short idea and turn it into {title.toLowerCase()}
+                                </Tooltip.Content>
+                            </Tooltip.Portal>
+                        </Tooltip.Root>
                     ) : (
                         <button onClick={stopRecording} className="text-sm px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500">Stop</button>
                     )}
-                    <button onClick={handleGenerate} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50">{loading ? "Generating..." : "Generate"}</button>
+                    <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerate} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50">{loading ? "Generating..." : "Generate"}</motion.button>
                 </div>
             </div>
 
@@ -166,7 +188,7 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
 			) : (
                 <div className="text-sm text-neutral-400">Upload audio or record to generate AI {title.toLowerCase()}</div>
 			)}
-		</div>
+        </motion.div>
 	);
 }
 

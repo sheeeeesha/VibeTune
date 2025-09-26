@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { motion } from "framer-motion";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { useMixer } from "@/store/useMixer";
 import { useMixerEngine } from "@/audio/useMixerEngine";
 
@@ -21,13 +23,14 @@ export default function MixerToolbar() {
     return (
         <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-                <button
+                <motion.button
+                    whileTap={{ scale: 0.98 }}
                     className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-sm disabled:opacity-50"
                     onClick={isPlaying ? stop : play}
                     disabled={!isReady}
                 >
                     {isPlaying ? "Stop All" : "Run All"}
-                </button>
+                </motion.button>
                 {Object.entries(layers).map(([key, state]) => (
                     <button
                         key={key}
@@ -43,10 +46,19 @@ export default function MixerToolbar() {
                 {(['beats','bass','melody','vocals'] as any[]).map((k) => (
                     <div key={k} className="flex items-center gap-2">
                         <span className="w-14 text-xs capitalize text-neutral-300">{k}</span>
-                        <input type="range" min={0} max={1} step={0.01}
+                        <Tooltip.Root>
+                          <Tooltip.Trigger asChild>
+                            <input type="range" min={0} max={1} step={0.01}
                                value={(volumes as any)[k]}
                                onChange={(e) => setLayerVolume(k, Number(e.target.value))}
-                        />
+                            />
+                          </Tooltip.Trigger>
+                          <Tooltip.Portal>
+                            <Tooltip.Content sideOffset={6} className="text-xs px-2 py-1 rounded bg-neutral-800 border border-neutral-700">
+                              Adjust {k} level
+                            </Tooltip.Content>
+                          </Tooltip.Portal>
+                        </Tooltip.Root>
                         <button className="text-xs px-2 py-1 rounded border border-neutral-700" onClick={() => toggleSolo(k)}>Solo</button>
                     </div>
                 ))}

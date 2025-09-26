@@ -9,9 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "framer-motion": "^12.23.22",
+    "lucide-react": "^0.544.0",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-hot-toast": "^2.6.0",
     "tone": "^15.1.22",
     "wavesurfer.js": "^7.10.3",
     "zustand": "^5.0.8"
