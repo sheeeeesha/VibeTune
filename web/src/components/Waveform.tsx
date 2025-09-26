@@ -27,7 +27,6 @@ export default function Waveform({
 			waveColor,
 			cursorWidth: 1,
 			barWidth: 2,
-			responsive: true,
 		});
 		wavesurferRef.current = ws;
 		ws.load(audioUrl);
