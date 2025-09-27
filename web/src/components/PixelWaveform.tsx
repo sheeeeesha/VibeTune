@@ -13,7 +13,7 @@ export default function PixelWaveform({
   className = "" 
 }: PixelWaveformProps) {
   const [bars, setBars] = useState<number[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   const generateBars = () => {
     const newBars = Array.from({ length: 40 }, () => {
