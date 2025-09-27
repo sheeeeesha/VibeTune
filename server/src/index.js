@@ -91,7 +91,7 @@ const LAYER_PROMPTS = {
   };
 
 // Helper: call Stable Audio 2.5 via fal.ai
-async function generateLayerWithFal({ layer, audioBuffer, mimeType = 'audio/wav', durationSeconds = 30, guidanceScale = 5, strength = 0.6, numInferenceSteps = 8 }) {
+async function generateLayerWithFal({ layer, audioBuffer, mimeType = 'audio/wav', durationSeconds = 30, guidanceScale = 5, strength = 0.6, numInferenceSteps = 8, seed = 42 }) {
 	if (!LAYER_PROMPTS[layer]) {
 		throw new Error('Unknown layer');
 	}
