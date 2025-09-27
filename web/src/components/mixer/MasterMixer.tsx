@@ -10,20 +10,20 @@ export default function MasterMixer() {
 
     return (
         <motion.section 
-            className="rounded-2xl border border-neutral-800 p-6 bg-neutral-900/40 shadow-[0_0_40px_-20px_rgba(234,179,8,.4)] flex flex-col gap-4"
+            className="rounded-xl sm:rounded-2xl border border-neutral-800 p-3 sm:p-6 bg-neutral-900/40 shadow-[0_0_40px_-20px_rgba(234,179,8,.4)] flex flex-col gap-3 sm:gap-4"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
             <div className="text-center">
-                <h3 className="text-xl font-semibold text-indigo-200">Master Mixer</h3>
-                <p className="text-sm text-neutral-400">Control all layers • Play together in perfect sync</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-indigo-200">Master Mixer</h3>
+                <p className="text-xs sm:text-sm text-neutral-400">Control all layers • Play together in perfect sync</p>
             </div>
             
             <div className="flex justify-center">
                 <PixelWaveform isPlaying={isPlaying} intensity={isPlaying ? 0.8 : 0.2} />
             </div>
             
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center pt-1 sm:pt-2">
                 <MixerToolbar />
             </div>
             

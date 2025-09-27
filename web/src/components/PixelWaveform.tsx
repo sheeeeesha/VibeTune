@@ -16,7 +16,9 @@ export default function PixelWaveform({
   const animationRef = useRef<number | undefined>(undefined);
 
   const generateBars = () => {
-    const newBars = Array.from({ length: 40 }, () => {
+    // Responsive number of bars based on screen size
+    const barCount = window.innerWidth < 640 ? 20 : 40;
+    const newBars = Array.from({ length: barCount }, () => {
       const baseHeight = Math.random() * intensity * 80 + 10;
       return Math.floor(baseHeight / 4) * 4; // Snap to 4px increments for pixel effect
     });
@@ -34,7 +36,8 @@ export default function PixelWaveform({
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      setBars(Array.from({ length: 40 }, () => 4));
+      const barCount = window.innerWidth < 640 ? 20 : 40;
+      setBars(Array.from({ length: barCount }, () => 4));
     }
 
     return () => {
@@ -88,7 +91,7 @@ export default function PixelWaveform({
   };
 
   return (
-    <div className={`flex items-center justify-center h-20 ${className}`}>
+    <div className={`flex items-center justify-center h-16 sm:h-20 ${className}`}>
       <div className="flex items-center gap-0.5 h-full">
         {bars.map((height, index) => renderPixelBar(height, index))}
       </div>

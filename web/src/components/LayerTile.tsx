@@ -116,59 +116,72 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
 
     return (
         <motion.div
-            className="rounded-2xl border border-neutral-800 p-5 bg-neutral-900/40 flex flex-col gap-4 shadow-[0_0_40px_-20px_rgba(168,85,247,.4)]"
+            className="rounded-xl sm:rounded-2xl border border-neutral-800 p-3 sm:p-5 bg-neutral-900/40 flex flex-col gap-3 sm:gap-4 shadow-[0_0_40px_-20px_rgba(168,85,247,.4)]"
             whileHover={{ y: -2, boxShadow: "0 0 60px -18px rgba(99,102,241,.45)" }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
             <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                    <div className="h-9 w-9 rounded-lg grid place-items-center text-xl bg-neutral-800/70">
+                <div className="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg grid place-items-center text-lg sm:text-xl bg-neutral-800/70 flex-shrink-0">
                         <span aria-hidden>{icon}</span>
                     </div>
-                    <div>
-                        <h3 className="text-lg font-semibold leading-6">{title}</h3>
+                    <div className="min-w-0 flex-1">
+                        <h3 className="text-base sm:text-lg font-semibold leading-5 sm:leading-6">{title}</h3>
                         {subtitle ? (
-                            <p className="text-xs text-neutral-400 mt-0.5">{subtitle}</p>
+                            <p className="text-xs text-neutral-400 mt-0.5 line-clamp-1">{subtitle}</p>
                         ) : null}
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <label className="text-sm px-3 py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 cursor-pointer border border-neutral-700 inline-flex items-center gap-1">
-                        <input
-                            type="file"
-                            accept="audio/*"
-                            className="hidden"
-                            onChange={(e) => {
-                                setError(null);
-                                const f = e.target.files?.[0] ?? null;
-                                setFile(f);
-                                if (f) {
-                                    const url = URL.createObjectURL(f);
-                                    const a = new Audio(url);
-                                    a.onloadedmetadata = () => setDurationSec(Math.max(1, Math.floor(a.duration)) || 30);
-                                } else {
-                                    setDurationSec(undefined);
-                                }
-                            }}
-                            disabled={loading}
-                        />
-                        <span>Upload Audio</span>
-                    </label>
-                    {!recording ? (
-                        <Tooltip.Root>
-                            <Tooltip.Trigger asChild>
-                                <button onClick={startRecording} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 border border-neutral-700 inline-flex items-center gap-1 disabled:opacity-50">Record Audio</button>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                                <Tooltip.Content sideOffset={6} className="text-xs px-2 py-1 rounded bg-neutral-800 border border-neutral-700">
-                                    Record a short idea and turn it into {title.toLowerCase()}
-                                </Tooltip.Content>
-                            </Tooltip.Portal>
-                        </Tooltip.Root>
-                    ) : (
-                        <button onClick={stopRecording} className="text-sm px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500">Stop</button>
-                    )}
-                    <motion.button whileTap={{ scale: 0.98 }} onClick={handleGenerate} disabled={loading} className="text-sm px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50">{loading ? "Generating..." : "Generate"}</motion.button>
+                <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-2 ml-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                        <label className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 cursor-pointer border border-neutral-700 inline-flex items-center gap-1">
+                            <input
+                                type="file"
+                                accept="audio/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                    setError(null);
+                                    const f = e.target.files?.[0] ?? null;
+                                    setFile(f);
+                                    if (f) {
+                                        const url = URL.createObjectURL(f);
+                                        const a = new Audio(url);
+                                        a.onloadedmetadata = () => setDurationSec(Math.max(1, Math.floor(a.duration)) || 30);
+                                    } else {
+                                        setDurationSec(undefined);
+                                    }
+                                }}
+                                disabled={loading}
+                            />
+                            <span className="hidden sm:inline">Upload Audio</span>
+                            <span className="sm:hidden">Upload</span>
+                        </label>
+                        {!recording ? (
+                            <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                    <button onClick={startRecording} disabled={loading} className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-neutral-800/70 hover:bg-neutral-800 border border-neutral-700 inline-flex items-center gap-1 disabled:opacity-50">
+                                        <span className="hidden sm:inline">Record Audio</span>
+                                        <span className="sm:hidden">Record</span>
+                                    </button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                    <Tooltip.Content sideOffset={6} className="text-xs px-2 py-1 rounded bg-neutral-800 border border-neutral-700">
+                                        Record a short idea and turn it into {title.toLowerCase()}
+                                    </Tooltip.Content>
+                                </Tooltip.Portal>
+                            </Tooltip.Root>
+                        ) : (
+                            <button onClick={stopRecording} className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500">Stop</button>
+                        )}
+                    </div>
+                    <motion.button 
+                        whileTap={{ scale: 0.98 }} 
+                        onClick={handleGenerate} 
+                        disabled={loading} 
+                        className="text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 w-full sm:w-auto"
+                    >
+                        {loading ? "Generating..." : "Generate"}
+                    </motion.button>
                 </div>
             </div>
 
@@ -184,23 +197,23 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
             ) : null}
 
             {layers[layer]?.audioUrl ? (
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                     <audio 
                         controls 
                         src={layers[layer]?.audioUrl} 
-                        className="w-full"
+                        className="w-full h-8 sm:h-10"
                         onPlay={() => setPlaying(true)}
                         onPause={() => setPlaying(false)}
                         onEnded={() => setPlaying(false)}
                     />
-                    <div className="space-y-2">
+                    <div className="space-y-1 sm:space-y-2">
                         <PixelWaveform isPlaying={playing} intensity={0.7} />
                         <Waveform audioUrl={layers[layer].audioUrl as string} />
                     </div>
                 </div>
             ) : (
-                <div className="space-y-3">
-                    <div className="text-sm text-neutral-400">Upload audio or record to generate AI {title.toLowerCase()}</div>
+                <div className="space-y-2 sm:space-y-3">
+                    <div className="text-xs sm:text-sm text-neutral-400">Upload audio or record to generate AI {title.toLowerCase()}</div>
                     <PixelWaveform isPlaying={false} intensity={0.1} />
                 </div>
             )}

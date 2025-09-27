@@ -20,13 +20,17 @@ export default function Waveform({
 
 	useEffect(() => {
 		if (!containerRef.current) return;
+		
+		// Responsive height based on screen size
+		const responsiveHeight = window.innerWidth < 640 ? height * 0.75 : height;
+		
 		const ws = WaveSurfer.create({
 			container: containerRef.current,
-			height,
+			height: responsiveHeight,
 			progressColor,
 			waveColor,
 			cursorWidth: 1,
-			barWidth: 2,
+			barWidth: window.innerWidth < 640 ? 1 : 2,
 		});
 		wavesurferRef.current = ws;
 		ws.load(audioUrl);
