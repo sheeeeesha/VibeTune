@@ -76,10 +76,11 @@ export default function LayerTile({ title, subtitle, icon = "🎵", layer }: Pro
         try {
             const url = `${apiBase}/generate/${layer}`;
             if (durationSec) form.append("durationSeconds", String(durationSec));
-            // server defaults: strength=0.5, guidance=5, steps=8 but can be overridden:
+            // server defaults: strength=0.5, guidance=5, steps=8, seed=42 but can be overridden:
             form.append("strength", "0.6");
             form.append("guidanceScale", "5");
             form.append("numInferenceSteps", "8");
+            form.append("seed", String(Math.floor(Math.random() * 1000000))); // Random seed for variation
             const resp = await fetch(url, { method: "POST", body: form });
             if (!resp.ok) {
                 const text = await resp.text();
