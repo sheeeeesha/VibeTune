@@ -38,7 +38,7 @@ export class SongService {
           
           // Upload to Supabase Storage
           await DatabaseService.uploadAudioFile(audioFile, storagePath);
-          const storageUrl = DatabaseService.getAudioFileUrl(storagePath);
+          const storageUrl = await DatabaseService.getAudioFileUrl(storagePath);
           
           // Save to database
           const dbClip = await DatabaseService.createAudioClip({

@@ -69,7 +69,7 @@ export default function NotesPage() {
     if (typeof window === 'undefined') return;
     
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const source = ctx.createMediaElementSource(audio);
       const gain = ctx.createGain();
       
@@ -104,7 +104,9 @@ export default function NotesPage() {
   // Apply real-time transposition
   useEffect(() => {
     if (!audioElement || transpose === 0) {
-      audioElement && (audioElement.playbackRate = 1);
+      if (audioElement) {
+        audioElement.playbackRate = 1;
+      }
       return;
     }
     

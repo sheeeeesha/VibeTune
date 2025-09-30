@@ -35,7 +35,7 @@ export class MigrationHelper {
 
           // Upload to Supabase Storage
           const uploadResult = await DatabaseService.uploadAudioFile(audioFile, storagePath)
-          const storageUrl = DatabaseService.getAudioFileUrl(storagePath)
+          const storageUrl = await DatabaseService.getAudioFileUrl(storagePath)
 
           // Save to database
           const dbClip = await DatabaseService.createAudioClip({

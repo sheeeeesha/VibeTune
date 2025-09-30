@@ -68,7 +68,7 @@ export default function ChopsPage() {
     if (typeof window === 'undefined') return;
     
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const source = ctx.createMediaElementSource(audio);
       const gain = ctx.createGain();
       
@@ -283,7 +283,7 @@ export default function ChopsPage() {
           <div className="text-center text-gray-400 py-12">
             <div className="text-6xl mb-4">🎵</div>
             <p className="text-lg mb-2">No chops created yet</p>
-            <p className="text-sm">Click "Auto Chop" to create segments</p>
+            <p className="text-sm">Click &quot;Auto Chop&quot; to create segments</p>
           </div>
         )}
       </div>

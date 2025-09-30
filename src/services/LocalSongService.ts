@@ -12,7 +12,7 @@ export interface Song {
 }
 
 export class LocalSongService {
-  private static STORAGE_KEY = 'vibetune_songs';
+  static STORAGE_KEY = 'vibetune_songs';
 
   // Create a new song from clips
   static async createSong(

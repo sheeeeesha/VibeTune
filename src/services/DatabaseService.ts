@@ -285,8 +285,8 @@ export class DatabaseService {
       isLooping: dbClip.is_looping,
       createdAt: new Date(dbClip.created_at),
       volume: dbClip.volume,
-      bpm: dbClip.bpm,
-      key: dbClip.detected_key,
+      bpm: dbClip.bpm || undefined,
+      key: dbClip.detected_key || undefined,
       chops: dbClip.audio_chops?.map(chop => ({
         id: chop.id,
         startTime: chop.start_time,
@@ -295,6 +295,22 @@ export class DatabaseService {
         audioBuffer: undefined // Will be loaded when needed
       })),
       effects: dbClip.audio_effects ? {
+        wet: {
+          enabled: true,
+          amount: 0.3
+        },
+        cutoff: {
+          enabled: true,
+          frequency: 2000
+        },
+        resonance: {
+          enabled: true,
+          amount: 0.2
+        },
+        decay: {
+          enabled: true,
+          amount: 0.4
+        },
         reverb: {
           enabled: dbClip.audio_effects.reverb_enabled,
           amount: dbClip.audio_effects.reverb_amount

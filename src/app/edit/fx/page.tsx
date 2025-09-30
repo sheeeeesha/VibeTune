@@ -11,6 +11,10 @@ export default function FXPage() {
   const router = useRouter();
   const [clip, setClip] = useState<AudioClip | null>(null);
   const [effects, setEffects] = useState<AudioEffects>({
+    wet: { enabled: true, amount: 0.3 },
+    cutoff: { enabled: true, frequency: 2000 },
+    resonance: { enabled: true, amount: 0.2 },
+    decay: { enabled: true, amount: 0.4 },
     reverb: { enabled: false, amount: 0.5 },
     delay: { enabled: false, time: 250, feedback: 0.3 },
     filter: { enabled: false, frequency: 1000, type: 'lowpass' },

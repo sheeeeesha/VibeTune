@@ -94,14 +94,14 @@ export default function SongsPage() {
   const createCombinedAudio = async (clips: AudioClip[]): Promise<Blob> => {
     if (clips.length === 0) {
       // Return empty audio if no clips
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const buffer = audioContext.createBuffer(1, 1, audioContext.sampleRate);
       const wavBuffer = bufferToWav(buffer);
       return new Blob([wavBuffer], { type: 'audio/wav' });
     }
 
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const sampleRate = audioContext.sampleRate;
       
       // Calculate total duration
@@ -150,7 +150,7 @@ export default function SongsPage() {
     } catch (error) {
       console.error('Failed to create combined audio:', error);
       // Fallback: create a simple tone
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const sampleRate = audioContext.sampleRate;
       const duration = clips.reduce((total, clip) => total + clip.duration, 0);
       const length = sampleRate * duration;

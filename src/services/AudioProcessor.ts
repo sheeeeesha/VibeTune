@@ -18,7 +18,7 @@ export class AudioProcessor {
       if (typeof window === 'undefined') {
         throw new Error('AudioContext is not available in server environment');
       }
-      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      this.audioContext = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     }
     return this.audioContext;
   }

@@ -48,6 +48,10 @@ export interface AudioChop {
 }
 
 export interface AudioEffects {
+  wet: { enabled: boolean; amount: number; }; // 0-1
+  cutoff: { enabled: boolean; frequency: number; }; // Hz
+  resonance: { enabled: boolean; amount: number; }; // 0-1
+  decay: { enabled: boolean; amount: number; }; // 0-1
   reverb: { enabled: boolean; amount: number; }; // 0-1
   delay: { enabled: boolean; time: number; feedback: number; }; // time in ms, feedback 0-1
   filter: { enabled: boolean; frequency: number; type: 'lowpass' | 'highpass' | 'bandpass'; }; // Hz
