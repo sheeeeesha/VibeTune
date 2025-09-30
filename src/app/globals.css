@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --background: #111827;
+  --foreground: #f9fafb;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+/* Gradient animation for recording button */
+.gradient-animation {
+  background: linear-gradient(-45deg, #f97316, #dc2626, #f97316, #ea580c);
+  background-size: 400% 400%;
+  animation: gradient 2s ease infinite;
+}

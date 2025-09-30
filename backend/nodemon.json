@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "prompts.js"],
+  "ext": "js,json",
+  "ignore": ["uploads/*", "node_modules/*"],
+  "delay": "200"
+}
